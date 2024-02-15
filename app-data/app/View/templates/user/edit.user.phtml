@@ -1,0 +1,35 @@
+<h3>Edit USER</h3>
+<?php if(!$users): ?>
+    <section class="error">No users yet</section>
+<?php else: ?>
+    <section>
+        <?php if($updateResults): ?>
+            <section class="result"><?=$updateResults?></section>
+        <?php endif; ?>
+        <?php if($updateErrors): ?>
+            <section class="error">
+                <?php foreach($updateErrors as $error): ?>
+                    <div><?=$error?></div>
+                <?php endforeach; ?>
+            </section>
+        <?php endif; ?>
+        <form action="/user/update" method="post">
+            <label for="updated_user"></label>
+            <select name="updated_user" id="updated_user" value="<?=$updateData?->updated_user ?: ""?>" required>
+                <option value="" disabled selected>choose</option>
+                <?php foreach($users as $user): ?>
+                    <?php $user = (object)$user; ?>
+                    <?php $selected = (string)$user->id === (string)$updateData?->updated_user ? 'selected' : '' ?>
+                    <option value="<?=$user->id?>" data-email="<?=$user->email?>" data-telegram="<?=$user->telegram?>" data-name="<?=$user->name?>" <?=$selected?>><?=$user->name?></option>
+                <?php endforeach; ?>
+            </select>
+            <label for="user_name"></label>
+            <input maxlength="100" type="text" name="user_name" id="user_name" placeholder="Name" value="<?=$updateData?->user_name?>" required/>
+            <label for="user_email"></label>
+            <input maxlength="200" type="text" name="user_email" id="user_email" placeholder="Email" value="<?=$updateData?->user_email?>" />
+            <label for="user_telegram"></label>
+            <input maxlength="200" type="text" name="user_telegram" id="user_telegram" placeholder="Telegram" value="<?=$updateData?->user_telegram?>"/>
+            <button type="submit">Save</button>
+        </form>
+    </section>
+<?php endif; ?>

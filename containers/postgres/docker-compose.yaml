@@ -1,0 +1,26 @@
+services:
+  postgres_php:
+    container_name: ${POSTGRES_INITDB_CONTAINER}
+    image: postgres:latest
+    restart: always
+    command: -p ${POSTGRES_INITDB_PORT}
+    ports:
+      - 127.0.0.1:${POSTGRES_INITDB_PORT}:${POSTGRES_INITDB_PORT}
+    environment:
+      POSTGRES_USER: ${POSTGRES_INITDB_ROOT_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_INITDB_ROOT_PASSWORD}
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -p ${POSTGRES_INITDB_PORT}"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 2m
+    networks:
+      - _php
+
+networks:
+  _php:
+    external: true
+    name: _php

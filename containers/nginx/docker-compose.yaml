@@ -1,0 +1,29 @@
+services:
+  nginx_php:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: nginx_php
+    container_name: nginx_php
+    ports:
+      - 127.0.0.1:49000:49000
+      - 127.0.0.1:49044:49044
+      - 127.0.0.1:49144:49144
+    volumes:
+      - ../../app-data/www:/data/app-data/www
+      - ../../app-data/www_v:/data/app-data/www_v
+      - ../../app-data/laravel:/data/app-data/_l
+      - ../../app-data/_v/dist:/dist
+    networks:
+      - _php
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 1s
+        max_attempts: 20
+        window: 120s
+
+networks:
+  _php:
+    external: true
+    name: _php

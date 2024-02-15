@@ -1,0 +1,43 @@
+<?php
+
+use App\Providers\Router\Routes;
+
+$breadcrumbs = array_map(function(Routes $route) {
+    return $route->value;
+}, Routes::cases());
+
+$cssPath = __DIR__ . '/../../../www/public/main.css';
+$css = file_exists($cssPath) ? "<style>" . file_get_contents($cssPath) . "</style>" : '';
+
+$jsPath = __DIR__ . '/../../../www/public/main.js';
+$js = file_exists($jsPath) ? "<script>" . file_get_contents($jsPath) . "</script>" : '';
+
+?>
+
+<?php ob_start();?>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title><?=$title?></title>
+        <meta name="description" content="<?=$description?>">
+        <?=$css?>
+    </head>
+    <body>
+        <header>
+            <nav>
+            <?php foreach($breadcrumbs as $breadcrumb):?>
+                <div>
+                    <a href="/<?=$breadcrumb?>"><?=$breadcrumb ? ucfirst($breadcrumb) : 'Home'?></a>
+                </div>
+            <?php endforeach;?>
+            </nav>
+        </header>
+        <main>
+            <?=$body?>
+        </main>
+        <?=$js?>
+    </body>
+</html>
+<?php echo str_replace('  ', ' ', str_replace(["\r", "\n"], '', preg_replace('/>[\s\r\n]+</s', '><', ob_get_clean()))); ?>

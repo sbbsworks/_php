@@ -1,0 +1,44 @@
+<?php
+
+session_start();
+$uploadResults = $_SESSION['upload-results'] ?? null;
+$uploadErrors = $_SESSION['upload-errors'] ?? null;
+session_destroy();
+session_write_close();
+
+$fileIsUploaded = $params['fileIsUploaded'];
+?>
+
+<h3>Upload FILE</h3>
+<section>
+    <?php if($uploadResults): ?>
+        <section class="result"><?=$uploadResults?></section>
+    <?php endif; ?>
+    <?php if($uploadErrors): ?>
+        <section class="error">
+            <?php foreach($uploadErrors as $error): ?>
+                <div><?=$error?></div>
+            <?php endforeach; ?>
+        </section>
+    <?php endif; ?>
+    <form action="/file" method="post" enctype="multipart/form-data">
+        <label for="file"></label>
+        <input type="file" name="file" id="file" accept="application/pdf" required/>
+        <button type="submit">Upload</button>
+    </form>
+</section>
+<h3>Uploaded FILEs</h3>
+<?php if($fileIsUploaded): ?>
+    <section class="_pdf">
+        <a href="/file/get" target="_blank">file</a>
+        <iframe
+            src="/file/get#toolbar=0&scrollbar=0"
+            frameBorder="0"
+            scrolling="auto"
+            height="100%"
+            width="100%"
+        ></iframe>
+    </section>
+<?php else: ?>
+    <section class="error">No uploaded files yet</section>
+<?php endif; ?>

@@ -1,0 +1,58 @@
+html {
+    --gap: 6px;
+    --row-gap: 6px;
+    --column-gap: 6px;
+}
+body {
+    * {
+        box-sizing: border-box;
+    }
+}
+
+nav {
+    margin-bottom: 20px;
+    display: flex;
+}
+nav div {
+    padding: var(--gap);
+}
+
+main {
+    padding: var(--gap);
+}
+
+main section {
+    padding: 6px;
+}
+
+form {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+}
+form > *:not(label) {
+    margin: 0 var(--column-gap) var(--row-gap) 0;
+}
+._pdf {
+    padding: var(--row-gap) var(--column-gap);
+    width: 100%;
+    max-width: 600px;
+    height: 600px;
+}
+.choose_pdf {
+    display: flex;
+    align-items: center;
+}
+.choose_pdf input {
+    cursor: pointer;
+    margin-right: var(--row-gap);
+}
+.result {
+    font-weight: 700;
+    color: darkcyan;
+}
+.error {
+    font-weight: 700;
+    color: darkred;
+}

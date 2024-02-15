@@ -1,0 +1,68 @@
+<?php
+
+session_start();
+$notifyResults = $_SESSION['notify-results'] ?? null;
+$notifyErrors = $_SESSION['notify-errors'] ?? null;
+$notifiedData = $_SESSION['notified-data'] ?? null;
+
+session_destroy();
+session_write_close();
+$users = $params['users'];
+$fileIsUploaded = $params['fileIsUploaded'];
+$fileName = $params['fileName'];
+?>
+
+<h3>Notify USERS</h3>
+<?php if(!$users): ?>
+    <section class="error">No users yet</section>
+<?php else: ?>
+    <section>
+        <?php if($notifyResults): ?>
+            <section class="result">
+                <?php foreach($notifyResults as $notifyResult): ?>
+                    <?php foreach($notifyResult as $result): ?>
+                        <div><?=$result?></div>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            </section>
+        <?php endif; ?>
+        <?php if($notifyErrors): ?>
+            <section class="error">
+                <?php foreach($notifyErrors as $notifyError): ?>
+                    <?php foreach($notifyError as $error): ?>
+                        <div><?=$error?></div>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            </section>
+        <?php endif; ?>
+        <form action="/notify" method="post">
+            <strong>choose a file</strong>
+            <?php if($fileIsUploaded): ?>
+                <section class="choose_pdf">
+                    <label for="choose_pdf"></label>
+                    <input type="checkbox" name="<?=$fileName?>" id="choose_pdf" checked disabled />
+                    <input type="hidden" name="<?=$fileName?>" value="on" />
+                    <a href="/file/get" target="_blank">file</a>
+                </section>
+            <?php else: ?>
+                <section class="error">No uploaded files yet</section>
+            <?php endif; ?>
+            <label for="notified_user"></label>
+            <select name="notified_user" id="notified_user" value="<?=$notifiedData?->notified_user ?? ""?>" required>
+                <option value="" disabled selected>choose a user</option>
+                <?php foreach($users as $user): ?>
+                    <?php $user = (object)$user; ?>
+                    <?php $selected = (string)$user->id === (string)$notifiedData?->notified_user ? 'selected' : '' ?>
+                    <option value="<?=$user->id?>" data-email="<?=$user->email?>" data-telegram="<?=$user->telegram?>" data-name="<?=$user->name?>" <?=$selected?>><?=$user->name?></option>
+                <?php endforeach; ?>
+            </select>
+            <label for="user_name"></label>
+            <input type="text" name="user_name" id="user_name" placeholder="Name" value="<?=$notifiedData?->user_name ?? ''?>" readonly disabled/>
+            <label for="user_email"></label>
+            <input type="text" name="user_email" id="user_email" placeholder="Email" value="<?=$notifiedData?->user_email ?? ''?>" readonly disabled/>
+            <label for="user_telegram"></label>
+            <input type="text" name="user_telegram" id="user_telegram" placeholder="Telegram" value="<?=$notifiedData?->user_telegram ?? ''?>" readonly disabled/>
+            <button type="submit">Notify user</button>
+        </form>
+    </section>
+<?php endif; ?>

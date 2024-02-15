@@ -1,0 +1,23 @@
+<?php
+
+$addUserTemplate = __DIR__ . '/user/add.user.phtml';
+$editUserTemplate = __DIR__ . '/user/edit.user.phtml';
+
+$users = $params;
+
+session_start();
+$createResults = $_SESSION['create-results'] ?? null;
+$updateResults = $_SESSION['update-results'] ?? null;
+$createData = $_SESSION['create-data'] ?? null;
+$createErrors = $_SESSION['create-errors'] ?? null;
+$updateErrors = $_SESSION['update-errors'] ?? null;
+$updateData = $_SESSION['update-data'] ?? null;
+session_destroy();
+session_write_close();
+
+if(file_exists($addUserTemplate)) {
+    require $addUserTemplate;
+}
+if(file_exists($editUserTemplate)) {
+    require $editUserTemplate;
+}

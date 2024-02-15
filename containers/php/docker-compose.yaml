@@ -1,0 +1,25 @@
+services:
+  php_php:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: php_0
+    container_name: php_0
+    volumes:
+      - ../../:/data
+    networks:
+      - _php
+
+  composer_php:
+    container_name: composer_php
+    image: composer
+    volumes:
+      - ../../app-data:/data
+    command: >
+      bash -c "cd /data
+      && composer install --ignore-platform-reqs"
+
+networks:
+  _php:
+    external: true
+    name: _php

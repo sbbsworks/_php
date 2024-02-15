@@ -1,0 +1,12 @@
+.env
+composer.lock
+vendor
+.vscode
+_futures
+_v
+www_v
+_l
+.pnpm-store
+d.php
+pto
+cm.sh
